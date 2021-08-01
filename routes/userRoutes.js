@@ -1,5 +1,6 @@
 const express = require("express");
 const authController = require("../controllers/authController");
+const userController = require("../controllers/userController");
 
 const router = express.Router();
 
@@ -13,5 +14,11 @@ router.post(
   authController.protect,
   authController.updatePassword
 );
+
+router.route("/").get(userController.getAllUsers);
+router
+  .route("/:id")
+  .get(userController.getOne)
+  .delete(userController.deleteOne);
 
 module.exports = router;
