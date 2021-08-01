@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, "Please provide a valid email address"],
   },
+  dateJoined: {
+    type: Date,
+    default: Date.now(),
+  },
   password: {
     type: String,
     rquired: [true, "Please provide your password"],
