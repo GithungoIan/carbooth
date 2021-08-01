@@ -21,8 +21,8 @@ app.enable("trust proxy");
 // Middlewares
 
 // Imprement cors
-app.use(cors);
-app.options("*", cors());
+// app.use(cors());
+// app.options("*", cors());
 
 // set security HTTP headers
 app.use(helmet());
@@ -32,14 +32,14 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// limit Requests from sme Ip
+// limit Requests from same Ip
 const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
   message: "Too many requests from this Ip, please try again in an hour",
 });
 
-app.use("/api/v1/users/login", limiter);
+app.use("/api", limiter);
 
 // Body prser, readin data from body in req.body
 app.use(express.json({ limit: "10kb" }));

@@ -195,7 +195,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   if (!token) {
     return next(
-      new AppError("You are not logged in, please login to gain access")
+      new AppError("You are not logged in, please login to gain access", 401)
     );
   }
 
@@ -223,7 +223,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // grant access to the protected route
   req.user = currentUser;
-  req.local.user = currentUser;
+  res.locals.user = currentUser;
   return next();
 });
 
