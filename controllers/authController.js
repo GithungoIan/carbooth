@@ -75,7 +75,18 @@ exports.login = catchAsync(async (req, res, next) => {
   // if okay send token to the user
   createSendToken(user, 200, res);
 });
+
 //  TODO: logout
+exports.logOut = (req, res) => {
+  res.cookie("jwt", "Logged out", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({
+    status: "success",
+  });
+};
+
 //  TODO: forgot password
 //  TODO: reset password
 //  TODO: update password
