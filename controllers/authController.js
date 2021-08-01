@@ -2,6 +2,7 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
+const crypo = require("crypo");
 
 //  TODO:  signup  || register
 exports.signup = catchAsync(async (req, res, next) => {
@@ -112,7 +113,11 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     //   subject: "your password reset token valid for (10 min)",
     //   messae,
     // });
-    res.status(200).json({ status: "success", message: "Token sent to email" });
+    res.status(200).json({
+      status: "success",
+      message: "Token sent to email",
+      token: resetToken,
+    });
   } catch (err) {
     user.passwordResetToken = undefined;
     user.PasswordResetExpires = undefined;
@@ -127,7 +132,35 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     );
   }
 });
+
 //  TODO: reset password
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  // get user based on the token
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+
+  // if token has not expired and there is a user, set password
+  if (!user) {
+    return next(new AppError("Token is invalid or has expired", 400));
+  }
+
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
+
+  // login the user and set JWT
+  createSendToken(user, 200, res);
+});
+
 //  TODO: update password
 //  TODO: protect routes
 //  TODO: check if user is logged in for rendered pages only
