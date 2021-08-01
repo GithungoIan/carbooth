@@ -27,7 +27,19 @@ const vehicleSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+  },
   photos: [String],
+});
+
+vehicleSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "user",
+    select: "name _id",
+  });
+  next();
 });
 
 vehicleSchema.pre("save", function (next) {

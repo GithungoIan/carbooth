@@ -6,7 +6,7 @@ const crypto = require("crypto");
 const userSchema = new mongoose.Schema({
   fistName: {
     type: String,
-    requred: [true, "Please provide your first name"],
+    required: [true, "Please provide your first name"],
   },
   surName: {
     type: String,
@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
   dateJoined: {
     type: Date,
     default: Date.now(),
+  },
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "user",
   },
   password: {
     type: String,
