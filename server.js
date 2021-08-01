@@ -21,7 +21,7 @@ mongoose
     useUnifiedTopology: true,
     useNewUrlParser: true,
   })
-  .then(() => cosole.log("DB connection established successfully"));
+  .then(() => console.log("DB connection established successfully"));
 
 const port = process.env.PORT;
 const server = app.listen(port, () => {
