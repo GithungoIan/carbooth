@@ -10,6 +10,8 @@ const cookieParser = require("cookie-parser");
 const compression = require("compression");
 const cors = require("cors");
 
+const userRouter = require("./routes/userRoutes");
+
 // start express app
 const app = express();
 
@@ -36,7 +38,7 @@ const limiter = rateLimit({
   message: "Too many requests from this Ip, please try again in an hour",
 });
 
-app.use("/api/v1/login", limiter);
+app.use("/api/v1/users/login", limiter);
 
 // Body prser, readin data from body in req.body
 app.use(express.json({ limit: "10kb" }));
@@ -60,8 +62,12 @@ app.use(
 app.use(compression());
 
 // routes
+app.use("/api/v1/users", userRouter);
 
 // test middleware
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server`, 400));
+});
 
 // error handling
 
