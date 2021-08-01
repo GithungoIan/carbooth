@@ -66,7 +66,7 @@ app.use(compression());
 
 // routes
 app.use("/api/v1/users", userRouter);
-app.use("api/v1/vehicle", vehicleRouter);
+app.use("/api/v1/vehicles", vehicleRouter);
 
 // test middleware
 app.all("*", (req, res, next) => {

@@ -5,7 +5,7 @@ const APIFeatures = require("../utils/apiFeatures");
 
 exports.setUserIds = (req, res, next) => {
   // allow nested routes
-  if (!req.body.user) req.body.user = rq.user.id;
+  if (!req.body.user) req.body.user = req.user.id;
   next();
 };
 

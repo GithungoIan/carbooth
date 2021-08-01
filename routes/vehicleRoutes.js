@@ -6,7 +6,7 @@ const router = express.Router();
 router
   .route("/")
   .get(vehicleController.getAllVehicles)
-  .post(vehicleController.setUserIds, vehicleController.addVehicle);
+  .post(vehicleController.addVehicle);
 
 router
   .route("/:id")
