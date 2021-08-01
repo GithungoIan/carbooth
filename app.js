@@ -12,6 +12,7 @@ const cors = require("cors");
 
 const userRouter = require("./routes/userRoutes");
 const vehicleRouter = require("./routes/vehicleRoutes");
+const globalErrorHandler = require("./controllers/errorController");
 const AppError = require("./utils/appError");
 
 // start express app
@@ -65,6 +66,7 @@ app.use(compression());
 
 // routes
 app.use("/api/v1/users", userRouter);
+app.use("api/v1/vehicle", vehicleRouter);
 
 // test middleware
 app.all("*", (req, res, next) => {
@@ -72,6 +74,7 @@ app.all("*", (req, res, next) => {
 });
 
 // error handling
+app.use(globalErrorHandler);
 
 // export app
 module.exports = app;
