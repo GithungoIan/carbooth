@@ -11,6 +11,7 @@ const compression = require("compression");
 const cors = require("cors");
 
 const userRouter = require("./routes/userRoutes");
+const vehicleRouter = require("./routes/vehicleRoutes");
 const AppError = require("./utils/appError");
 
 // start express app
