@@ -88,6 +88,45 @@ exports.logOut = (req, res) => {
 };
 
 //  TODO: forgot password
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // get the user based on the email address
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError("There is no user with that email address", 404));
+  }
+
+  // genereate the random reset token
+  const resetToken = user.createPasswordResetToken();
+  await user.save({ validateBeforeSave: false });
+
+  // send it to the users email address
+  const resetURL = `${req.protocal}://${req.get(
+    "host"
+  )}/api/v1/users/resetPassword/${resetToken}`;
+
+  const message = `Forgot your password? submit a patch request with your new password and passwordConfirm to : ${resetURL}.\n If you didn't forget your password, please ignore this email`;
+
+  try {
+    // await sendEmail({
+    //   email: user.email,
+    //   subject: "your password reset token valid for (10 min)",
+    //   messae,
+    // });
+    res.status(200).json({ status: "success", message: "Token sent to email" });
+  } catch (err) {
+    user.passwordResetToken = undefined;
+    user.PasswordResetExpires = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    return next(
+      new AppError(
+        "There was an error sending your email, please try again",
+        500
+      )
+    );
+  }
+});
 //  TODO: reset password
 //  TODO: update password
 //  TODO: protect routes
