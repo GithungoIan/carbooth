@@ -162,6 +162,23 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 //  TODO: update password
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  // get user from the collection
+  const user = await User.findById(req.user.id).select("+password");
+
+  // check if the posted password is correctPassword
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+    return next(new AppError("Your current password is wrong", 401));
+  }
+
+  // if correct update the password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+
+  // log in the user
+  createSendToken(user, 200, res);
+});
 //  TODO: protect routes
 //  TODO: check if user is logged in for rendered pages only
 //  TODO: restrict to admin ||  users
