@@ -1,5 +1,6 @@
 const express = require("express");
 const vehicleController = require("../controllers/vehicleController");
+const authController = require("../controllers/authController");
 
 const router = express.Router();
 
@@ -13,5 +14,13 @@ router
   .get(vehicleController.getVehicle)
   .delete(vehicleController.deleteVehicle)
   .patch(vehicleController.updateVehicle);
+
+router
+  .route("/upload")
+  .patch(
+    authController.protect,
+    vehicleController.uloadVehicleImages,
+    vehicleController.addImages
+  );
 
 module.exports = router;
