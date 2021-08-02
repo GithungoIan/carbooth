@@ -7,6 +7,14 @@ const vehicleSchema = new mongoose.Schema({
     required: [true, "Plese provide the stock number"],
   },
   slug: String,
+  author_id: {
+    type: String,
+    required: [true, "Plese provide the author_id"],
+  },
+  uid: {
+    type: String,
+    required: [true, "Please provide a uid"],
+  },
   make: {
     type: String,
     requiedBy: [true, "Please provide a make for the vehicle"],
