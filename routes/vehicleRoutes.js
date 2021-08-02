@@ -7,7 +7,7 @@ const router = express.Router();
 router
   .route("/")
   .get(vehicleController.getAllVehicles)
-  .post(vehicleController.addVehicle);
+  .post(authController.protect, vehicleController.addVehicle);
 
 router
   .route("/:id")
@@ -17,7 +17,7 @@ router
 
 router
   .route("/upload")
-  .patch(
+  .post(
     authController.protect,
     vehicleController.uloadVehicleImages,
     vehicleController.addImages
